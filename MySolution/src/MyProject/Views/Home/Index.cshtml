@@ -1,1 +1,16 @@
-﻿Hello World!
+﻿@{
+    @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment env
+
+
+    if (env.IsDevelopment())
+    {
+        Layout = "_LayoutFull";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+
+}
+
+Hello World!
