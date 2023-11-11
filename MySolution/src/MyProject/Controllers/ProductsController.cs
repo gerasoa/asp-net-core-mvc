@@ -8,8 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using MyProject.Data;
 using MyProject.Models;
 
+
 namespace MyProject.Controllers
 {
+    [Route("my-products")]
     public class ProductsController : Controller
     {
         private readonly AppDbContext _context;
@@ -26,8 +28,7 @@ namespace MyProject.Controllers
                           View(await _context.Products.ToListAsync()) :
                           Problem("Entity set 'AppDbContext.Products'  is null.");
         }
-
-        // GET: Products/Details/5
+        [Route("details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Products == null)
@@ -45,7 +46,7 @@ namespace MyProject.Controllers
             return View(product);
         }
 
-        // GET: Products/Create
+        [Route("new-product")]
         public IActionResult Create()
         {
             return View();
@@ -54,7 +55,7 @@ namespace MyProject.Controllers
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("new-product")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Image,Price")] Product product)
         {
@@ -67,7 +68,7 @@ namespace MyProject.Controllers
             return View(product);
         }
 
-        // GET: Products/Edit/5
+       [Route("edit-product/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Products == null)
@@ -86,7 +87,7 @@ namespace MyProject.Controllers
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("edit-product/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Image,Price")] Product product)
         {
@@ -118,7 +119,7 @@ namespace MyProject.Controllers
             return View(product);
         }
 
-        // GET: Products/Delete/5
+        [Route("delete-product/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Products == null)
@@ -137,7 +138,7 @@ namespace MyProject.Controllers
         }
 
         // POST: Products/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("delete-product/{id}"), ActionName("delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
