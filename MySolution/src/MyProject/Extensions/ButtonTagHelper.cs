@@ -9,10 +9,12 @@ namespace MyProject.Extensions
     public class ButtonTagHelper : TagHelper
     {
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly LinkGenerator _linkGenerator;
 
-        public ButtonTagHelper(IHttpContextAccessor contextAccessor)
+        public ButtonTagHelper(IHttpContextAccessor contextAccessor, LinkGenerator linkGenerator)
         {
             _contextAccessor = contextAccessor;
+            _linkGenerator = linkGenerator;
         }
 
 
@@ -50,8 +52,18 @@ namespace MyProject.Extensions
             //get the route information and select the controller name
             var controller = _contextAccessor.HttpContext?.GetRouteData().Values["controller"]?.ToString();
 
+            var host = $"{_contextAccessor.HttpContext.Request.Scheme}://" + 
+                $"{_contextAccessor.HttpContext.Request.Host.Value}";
+
+            var indexPath = _linkGenerator.GetPathByAction(
+                _contextAccessor.HttpContext,
+                actionName,
+                controller,
+                values:new { id = RouteId }
+                );
+
             output.TagName = "a";
-            output.Attributes.SetAttribute("href", $"{controller}/{actionName}/{RouteId}");
+            output.Attributes.SetAttribute("href", $"{indexPath}");
             output.Attributes.SetAttribute("class", ClassName);
 
             var iconSpan = new TagBuilder("span");
