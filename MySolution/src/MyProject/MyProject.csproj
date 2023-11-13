@@ -11,6 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Modules\Products\Data\" />
+    <Folder Include="Modules\Products\Models\" />
+    <Folder Include="Modules\Sales\Data\" />
+    <Folder Include="Modules\Sales\Models\" />
+    <Folder Include="Modules\Sales\Views\Shared\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
