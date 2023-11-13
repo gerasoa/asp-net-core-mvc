@@ -7,7 +7,7 @@ namespace MyProject.Areas.Sales.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return View("Index");
         }
     }
 }
