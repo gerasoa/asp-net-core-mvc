@@ -1,0 +1,12 @@
+﻿@using MyProject.Services;
+@inject MyOperationService myOperationService
+
+<div>
+    <p>
+        @Html.Raw(
+            myOperationService.Transient.OperationId + "<br>" +
+        myOperationService.Scoped.OperationId + "<br>" +
+        myOperationService.Singleton.OperationId + "<br>" +
+        myOperationService.SingletonInstance.OperationId + "<br>" )
+    </p>
+</div>
