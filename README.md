@@ -38,7 +38,7 @@ dotnet run
 
 ## Wiki
 
-For details about the ASP.NET Core MVC technology and additional information on setting up this project, please refer to our [Wiki](https://github.com/your-user/your-repo/wiki).
+For details about the ASP.NET Core MVC technology and additional information on setting up this project, please refer to our [wiki](https://github.com/gerasoa/asp-net-core-mvc/wiki).
 
 ## Contributing
 
