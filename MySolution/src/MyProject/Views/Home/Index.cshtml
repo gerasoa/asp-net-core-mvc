@@ -1,16 +1,38 @@
-﻿@{
+﻿@using System.Text.Encodings.Web;
+@inject HtmlEncoder encoder
+@{
     @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment env
 
 
     if (env.IsDevelopment())
     {
-        Layout = "_LayoutFull";
+        //Layout = "_LayoutFull";
+        Layout = "_Layout";
     }
     else
     {
         Layout = "_Layout";
     }
 
+
+}
+
+@{
+    var unsafeHtml = "<img src='https://t3.ftcdn.net/jpg/05/56/29/10/360_F_556291020_q2ieMiOCKYbtoLITrnt7qcSL1LJYyWrU.jpg' />";
+    var encoded = encoder.Encode(unsafeHtml);
 }
 
 Hello World!
+<br />
+<br />
+@unsafeHtml
+<br />
+<br />
+@Html.Raw(unsafeHtml)
+<br />
+<br />
+@encoded
+<br />
+<br />
+@Html.Raw(encoded)
+
