@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyProject.Data;
+using MyProject.Extensions;
 using MyProject.Models;
 
 
 namespace MyProject.Controllers
 {
+    //[Authorize(Roles = "Admin")]
     [Route("my-products")]
     public class ProductsController : Controller
     {
@@ -24,6 +27,8 @@ namespace MyProject.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
+            var user = HttpContext.User.Identity;
+
               return _context.Products != null ? 
                           View(await _context.Products.ToListAsync()) :
                           Problem("Entity set 'AppDbContext.Products'  is null.");
@@ -46,6 +51,7 @@ namespace MyProject.Controllers
             return View(product);
         }
 
+        [ClaimsAuthorize("Products", "AD")]
         [Route("new-product")]
         public IActionResult Create()
         {
@@ -55,6 +61,7 @@ namespace MyProject.Controllers
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [ClaimsAuthorize("Products", "AD")]
         [HttpPost("new-product")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Image,Price")] Product product)
