@@ -32,7 +32,6 @@ namespace MyProject.Configuration
 
             builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
             builder.Services.AddHsts(options =>
             {
                 options.Preload = true;
@@ -41,6 +40,9 @@ namespace MyProject.Configuration
                 options.ExcludedHosts.Add("example.com");
                 options.ExcludedHosts.Add("www.example.com");
             });
+
+            builder.Services.Configure<ApiConfiguration>(
+                builder.Configuration.GetSection(ApiConfiguration.ConfigName));
 
             return builder;
         }
