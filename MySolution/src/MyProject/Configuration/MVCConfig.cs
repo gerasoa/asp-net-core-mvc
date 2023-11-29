@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using MyProject.Data;
+using System.Reflection;
 
 namespace MyProject.Configuration
 {
@@ -14,7 +15,9 @@ namespace MyProject.Configuration
                 .SetBasePath(builder.Environment.ContentRootPath)
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
-                .AddEnvironmentVariables();
+                .AddEnvironmentVariables()
+                .AddUserSecrets(Assembly.GetExecutingAssembly(), true);
+                
 
 
             builder.Services.AddControllersWithViews(options =>
