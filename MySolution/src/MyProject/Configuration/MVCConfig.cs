@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using MyProject.Data;
+using MyProject.Extensions;
 using System.Reflection;
 
 namespace MyProject.Configuration
@@ -23,6 +24,7 @@ namespace MyProject.Configuration
             builder.Services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(typeof(AuditFilter));
             });
 
             builder.Services.Configure<RazorViewEngineOptions>(options =>
