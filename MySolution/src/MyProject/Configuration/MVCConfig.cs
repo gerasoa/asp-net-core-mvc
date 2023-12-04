@@ -58,6 +58,8 @@ namespace MyProject.Configuration
             }
             else
             {
+                app.UseExceptionHandler("/error/500");
+                app.UseStatusCodePagesWithRedirects("/error/{0}");
                 app.UseHsts();
             }
 
