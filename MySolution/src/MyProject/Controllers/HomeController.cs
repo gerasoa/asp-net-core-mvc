@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using MyProject.Configuration;
 using MyProject.Models;
@@ -8,10 +11,12 @@ namespace MyProject.Controllers
     public class HomeController : Controller
     {
         private readonly ApiConfiguration ApiConfig;
+        private readonly IStringLocalizer<HomeController> _localizer;
 
-        public HomeController(IOptions<ApiConfiguration> apiConfiguration)
+        public HomeController(IOptions<ApiConfiguration> apiConfiguration, IStringLocalizer<HomeController> localizer)
         {
             ApiConfig = apiConfiguration.Value;
+            _localizer = localizer;
         }
 
         public IActionResult Index()
@@ -22,8 +27,21 @@ namespace MyProject.Controllers
             var secret = ApiConfig.UserSecret;
             var domain = ApiConfig.Domain;
 
+            ViewData["Message"] = _localizer["Seja bem vindo!"];
 
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+            CookieRequestCultureProvider.DefaultCookieName,
+            CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+            new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
+
+            return LocalRedirect(returnUrl);
         }
 
         [Route("test")]

@@ -18,14 +18,19 @@ namespace MyProject.Configuration
                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables()
                 .AddUserSecrets(Assembly.GetExecutingAssembly(), true);
-                
+
 
 
             builder.Services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 options.Filters.Add(typeof(AuditFilter));
-            });
+
+                //MvcOptionsConfig.ConfigurarMensagensDeModelBinding(options.ModelBindingMessageProvider);
+            })
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization();
+                
 
             builder.Services.Configure<RazorViewEngineOptions>(options =>
             {
@@ -64,6 +69,8 @@ namespace MyProject.Configuration
                 app.UseStatusCodePagesWithRedirects("/error/{0}");
                 app.UseHsts();
             }
+
+            app.useGlobalizationConfig();
 
             app.UseHttpsRedirection();
 

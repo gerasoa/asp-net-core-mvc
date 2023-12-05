@@ -1,4 +1,6 @@
-﻿using MyProject.Services;
+﻿using Microsoft.AspNetCore.Mvc.DataAnnotations;
+using MyProject.Extensions;
+using MyProject.Services;
 
 namespace MyProject.Configuration
 {
@@ -14,6 +16,8 @@ namespace MyProject.Configuration
             builder.Services.AddSingleton<IOperationSingletonInstance>(new MyOperation(Guid.Empty));
             
             builder.Services.AddTransient<MyOperationService>();
+
+            builder.Services.AddSingleton<IValidationAttributeAdapterProvider, MoedaValidationAttributeAdapterProvider>();
 
             return builder;
         }
