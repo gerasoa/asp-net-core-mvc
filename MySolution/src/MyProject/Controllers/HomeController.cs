@@ -44,6 +44,20 @@ namespace MyProject.Controllers
             return LocalRedirect(returnUrl);
         }
 
+        [Route("cookies")]
+        public IActionResult Cookie()
+        {
+            var cookiesOptions = new CookieOptions
+            {
+                Expires = DateTime.UtcNow.AddYears(1)
+            };
+
+            Response.Cookies.Append("MyCookie", "dataCookie", cookiesOptions);
+
+            return View();
+        }
+
+
         [Route("test")]
         public IActionResult Test()
         {

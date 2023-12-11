@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using MyProject.Data;
 using MyProject.Extensions;
 using System.Reflection;
@@ -19,7 +20,7 @@ namespace MyProject.Configuration
                 .AddEnvironmentVariables()
                 .AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 
-
+            builder.Services.AddResponseCaching();
 
             builder.Services.AddControllersWithViews(options =>
             {
@@ -30,7 +31,14 @@ namespace MyProject.Configuration
             })
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization();
-                
+
+            builder.Services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = contex => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.ConsentCookieValue = "true";
+            });
+
 
             builder.Services.Configure<RazorViewEngineOptions>(options =>
             {
@@ -70,11 +78,15 @@ namespace MyProject.Configuration
                 app.UseHsts();
             }
 
+            app.UseResponseCaching();
+
             app.useGlobalizationConfig();
 
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
+
+            app.UseCookiePolicy();
 
             app.UseRouting();
 
