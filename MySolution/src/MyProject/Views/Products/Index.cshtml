@@ -43,7 +43,9 @@
                      <spam class="fa fa-search"></spam></button>
                     <bt button-type="Detail" route-id="@item.Id"></bt>
                     <bt button-type="Update" route-id="@item.Id"></bt>
-                    <bt button-type="Delete" route-id="@item.Id"></bt>
+
+                    <bt button-type="Delete" disable-by-claim-name="Produtos" disable-by-claim-value="EX" route-id="@item.Id"></bt>
+                    
                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#excluirModal" 
                     data-id="@item.Id"><spam class="fa fa-trash"></spam></button>
 
