@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using MyProject.Data;
 using MyProject.Extensions;
 using MyProject.Models;
-
+using NuGet.Protocol;
 
 namespace MyProject.Controllers
 {
@@ -63,11 +63,19 @@ namespace MyProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [ClaimsAuthorize("Products", "AD")]
         [HttpPost("new-product")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Image,Price")] Product product)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Name,ImageUpload,Price")] Product product)
         {
             if (ModelState.IsValid)
             {
+                var imgPrefix = Guid.NewGuid() + "_";
+                if(!await FileUpload(product.ImageUpload, imgPrefix))
+                {
+                    return View(product);
+                }
+
+                product.Image = imgPrefix + product.ImageUpload.FileName;
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -96,17 +104,32 @@ namespace MyProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("edit-product/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Image,Price")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ImageUpload,Price")] Product product)
         {
             if (id != product.Id)
             {
                 return NotFound();
             }
 
+            var productDB = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    product.Image = productDB.Image;
+
+                     if(product.ImageUpload != null)
+                    {
+                        var imgPrefix = Guid.NewGuid() + "_";
+                        if(!await FileUpload(product.ImageUpload, imgPrefix))
+                        {
+                            return View(product);
+                        }
+
+                        product.Image = imgPrefix + product.ImageUpload.FileName;
+                    }
+
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
@@ -166,6 +189,26 @@ namespace MyProject.Controllers
         private bool ProductExists(int id)
         {
           return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private async Task<bool> FileUpload(IFormFile file, string imgPrefix)
+        {
+            if (file.Length <= 0) return false;
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", imgPrefix + file.FileName);
+
+            if (System.IO.File.Exists(path))
+            {
+                ModelState.AddModelError(string.Empty, "There is already a file with this name!");
+                return false;
+            }
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return true;
         }
     }
 }
