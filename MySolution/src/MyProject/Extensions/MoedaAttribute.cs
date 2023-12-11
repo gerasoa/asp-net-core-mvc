@@ -62,7 +62,7 @@ namespace MyProject.Extensions
     public class MoedaValidationAttributeAdapterProvider : IValidationAttributeAdapterProvider
     {
         private readonly IValidationAttributeAdapterProvider _baseProvider = new ValidationAttributeAdapterProvider();
-        public IAttributeAdapter GetAttributeAdapter(ValidationAttribute attribute, IStringLocalizer stringLocalizer)
+        public IAttributeAdapter? GetAttributeAdapter(ValidationAttribute attribute, IStringLocalizer stringLocalizer)
         {
             if(attribute is MoedaAttribute moedaAttribute)
             {

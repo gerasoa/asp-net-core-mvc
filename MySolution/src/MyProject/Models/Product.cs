@@ -1,5 +1,7 @@
 ﻿using MyProject.Extensions;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyProject.Models
 {
@@ -10,8 +12,12 @@ namespace MyProject.Models
 
         [Required(ErrorMessage = "O campo {0} e obrigatorio")]
         public string? Name { get; set; }
-        
-        [Required(ErrorMessage = "O campo {0} e obrigatorio")]
+
+        [NotMapped]
+        [DisplayName("Product Image")]
+        public IFormFile? ImageUpload { get; set; }
+
+        //[Required(ErrorMessage = "O campo {0} e obrigatorio")]
         public string? Image { get; set; }
 
         [Moeda]
